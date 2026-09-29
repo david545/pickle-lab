@@ -8,14 +8,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef1f4;--panel:#fff;--panel2:#f5f7fa;--line:#d5dbe3;--text:#122033;--muted:#5b6b80;--act:#e3661b;--tpl:#0a9e93;--bad:#c2410c;--good:#15803d;
- --stage:#e3e9f0;--chalk:#fbfbf8;--grid-a:#aab6c4;--grid-b:#cfd7e1;--sky:#cfe6d6;--sky2:#e6f2ea;--dirt:#3a78b0;--dirt2:#2e6697;
+ --stage:#e3e9f0;--chalk:#fbfbf8;--grid-a:#aab6c4;--grid-b:#cfd7e1;--sky:#cfe6d6;--sky2:#e6f2ea;--dirt:#3a78b0;--dirt2:#2e6697;--sur:#4f9a63;
  --act-soft:rgba(227,102,27,.07);--act-soft2:rgba(227,102,27,.2);--num:"Barlow Condensed","Arial Narrow",sans-serif;
  --body:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color-scheme:light;
  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1726;--panel:#15213a;--panel2:#1a2844;--line:#27365a;--text:#e9eef6;--muted:#8fa0bb;--act:#ff8a3d;--tpl:#2ee6d6;--bad:#ff9f6e;--good:#6ee7a8;
- --stage:#0a1221;--chalk:#eef2f7;--grid-a:#2f4166;--grid-b:#1a2742;--sky:#0c1f1a;--sky2:#153428;--dirt:#1f4b75;--dirt2:#183d60;--act-soft:rgba(255,138,61,.08);--act-soft2:rgba(255,138,61,.22);color-scheme:dark}}
+ --stage:#0a1221;--chalk:#eef2f7;--grid-a:#2f4166;--grid-b:#1a2742;--sky:#0c1f1a;--sky2:#153428;--dirt:#1f4b75;--dirt2:#183d60;--sur:#1f4a33;--act-soft:rgba(255,138,61,.08);--act-soft2:rgba(255,138,61,.22);color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0e1726;--panel:#15213a;--panel2:#1a2844;--line:#27365a;--text:#e9eef6;--muted:#8fa0bb;--act:#ff8a3d;--tpl:#2ee6d6;--bad:#ff9f6e;--good:#6ee7a8;
- --stage:#0a1221;--chalk:#eef2f7;--grid-a:#2f4166;--grid-b:#1a2742;--sky:#0c1f1a;--sky2:#153428;--dirt:#1f4b75;--dirt2:#183d60;--act-soft:rgba(255,138,61,.08);--act-soft2:rgba(255,138,61,.22);color-scheme:dark}
+ --stage:#0a1221;--chalk:#eef2f7;--grid-a:#2f4166;--grid-b:#1a2742;--sky:#0c1f1a;--sky2:#153428;--dirt:#1f4b75;--dirt2:#183d60;--sur:#1f4a33;--act-soft:rgba(255,138,61,.08);--act-soft2:rgba(255,138,61,.22);color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 var(--body)}
@@ -101,6 +101,7 @@ details p{font-size:14px;color:var(--muted);max-width:78ch}
 #ytbox{margin-top:10px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;max-width:900px}
 #ytbox.tall{aspect-ratio:9/16;max-width:360px}#ytbox iframe{width:100%;height:100%;border:0;display:block}
 #ytopen{display:inline-block;margin-top:8px;font-size:14px;color:var(--tpl)}
+.tips{margin-bottom:12px}.tips ul{margin:4px 0 0;padding-left:1.2em;font-size:14px;line-height:1.7}
 [hidden]{display:none!important}
 @media (max-width:860px){.stage{grid-template-columns:1fr;grid-template-areas:"three" "vid"}.grid2{grid-template-columns:1fr}.tnum{min-width:0}}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
@@ -109,9 +110,9 @@ details p{font-size:14px;color:var(--muted);max-width:78ch}
 <body>
 <div class="app">
 <header class="top">
- <div><h1>PICKLE LAB <small style="font:600 14px var(--body);color:var(--muted)">v1.0</small><span>匹克球擊球動作實驗室</span></h1><p id="status">載入中…</p></div>
+ <div><h1>PICKLE LAB <small style="font:600 14px var(--body);color:var(--muted)">v1.1</small><span>匹克球擊球動作實驗室</span></h1><p id="status">載入中…</p></div>
  <div class="acts">
-  <label class="sm">擊球類型<select id="stype"><option value="drive">正手抽球</option><option value="backhand">反手抽球</option><option value="serve">發球（低手）</option><option value="dink">吊小球（dink）</option><option value="drop">第三拍放短</option><option value="volley">截擊（volley）</option></select></label>
+  <label class="sm">擊球類型<select id="stype"></select></label>
   <label class="btn pri">上傳擊球影片<input type="file" id="file" accept="video/*"></label>
   <button class="btn" id="demo">載入示範資料</button>
   <label class="sm">取樣<select id="sfps"><option value="30">30 fps</option><option value="60">60 fps</option></select></label>
@@ -146,6 +147,7 @@ details p{font-size:14px;color:var(--muted);max-width:78ch}
  <div id="ytbox" hidden></div><a id="ytopen" target="_blank" rel="noopener" hidden>在 YouTube 開啟 ↗</a>
  <p class="cap">放慢或逐格請用 YouTube 播放器齒輪裡的「播放速度」；暫停後按 , 和 . 鍵可逐格。若這裡顯示空白，是環境擋住了內嵌畫面，下載後在本機開啟即可正常顯示。</p></div>
 <div class="chips" id="chips"></div>
+<div class="card tips" id="tips"></div>
 <h2 id="mTitle">平均</h2>
 <div class="metrics" id="metrics"></div>
 <div class="grid2">
@@ -153,21 +155,26 @@ details p{font-size:14px;color:var(--muted);max-width:78ch}
  <div class="card"><h3>瑕疵統計<small>納入平均的擊球</small></h3><div id="flaws"></div></div>
 </div>
 <div class="card" style="margin-top:10px"><h3>每一拍<small>取消勾選可排除失誤的擊球；點列可跳到該拍</small></h3>
-<div class="tw"><table><thead><tr><th>納入</th><th>拍</th><th>擊球影格</th><th>高度 cm</th><th>前後 cm</th><th>引拍 cm</th><th>拍速 km/h</th><th>膝蓋</th><th>轉身</th><th>頭部 cm</th><th>墊步 ms</th><th>瑕疵</th></tr></thead><tbody id="tbody"></tbody></table></div></div>
+<div class="tw"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div></div>
 <details><summary>數據怎麼算</summary>
 <dl>
-<dt>持拍手</dt><dd>整段影片中平均速度較快的手腕視為持拍手；左手持拍時理想模板會自動鏡像。</dd>
+<dt>站位</dt><dd>依專業教學設定：發球在底線後方；第三拍抽球、反手抽球、雙手反拍、第三拍吊球、長丁克在底線；重置球在過渡區；丁克、截擊、加速球在廚房線。3D 球場會依擊球類型自動擺放。</dd>
+<dt>持拍手</dt><dd>整段影片中平均速度較快的手腕視為持拍手；左手持拍時理想模板與球場會自動鏡像。</dd>
 <dt>擊球點</dt><dd>持拍手手腕的速度峰值。高於 max(0.8 m/s, 全段峰值 45%) 且間隔 1.5 秒以上的峰值視為一拍。</dd>
-<dt>擊球點高度</dt><dd>擊球瞬間手腕離地高度。腰線以骨盆中心上方 8 cm 估算；發球低於腰線不到 5 cm 會提醒、高於腰線判定違規風險。規則另要求拍頭低於手腕，但系統不追蹤球拍，無法判斷。</dd>
-<dt>擊球點前後</dt><dd>擊球瞬間手腕在骨盆中心前方的水平距離，前方以準備姿勢時的身體朝向為準。</dd>
-<dt>引拍幅度</dt><dd>手腕從引拍最後方位置到擊球點的前後距離。吊小球與截擊應精簡，抽球需要足夠引拍。</dd>
+<dt>擊球點高度</dt><dd>擊球瞬間手腕離地高度。腰線以骨盆中心上方 8 cm 估算；發球高於腰線判定違規風險。規則另要求拍頭低於手腕，但系統不追蹤球拍，無法判斷。</dd>
+<dt>擊球點前後</dt><dd>擊球瞬間手腕在骨盆中心前方的水平距離，前方以準備姿勢的身體朝向為準。</dd>
+<dt>引拍幅度</dt><dd>手腕從引拍最後方位置到擊球點的前後距離。</dd>
 <dt>揮拍速度</dt><dd>擊球點附近手腕峰值速度；拍速以 1.5 倍粗估，僅供同一人前後比較。</dd>
 <dt>膝蓋彎曲</dt><dd>擊球瞬間「髖-膝-踝」夾角換算的屈曲角，雙膝平均。</dd>
-<dt>上半身旋轉</dt><dd>準備到擊球期間，雙肩連線在水平面的轉角範圍。</dd>
-<dt>頭部位移</dt><dd>準備到擊球之間，鼻尖相對起點的最大 3D 位移。</dd>
-<dt>分腿墊步</dt><dd>擊球前 1.0 到 0.12 秒內，雙腳踝同時離地 2.5 cm 以上視為墊步，數值為墊步最高點到擊球的時間。</dd>
+<dt>揮拍路徑仰角</dt><dd>擊球前 1 格到後 2 格的手腕位移與水平面夾角，用來判斷吊球、長丁克、丁克、重置球是否由低到高提拉。</dd>
+<dt>隨揮長度</dt><dd>擊球後 0.25 秒內手腕移動的路徑長。</dd>
+<dt>手腕翻動</dt><dd>擊球前 0.2 秒到後 0.07 秒，「手肘-手腕-食指根」夾角的變化範圍。長丁克與加速球允許手腕動作，只顯示不判定。</dd>
+<dt>擊球時腳步</dt><dd>擊球前後各 1 格的腳踝平均速度，用來判斷是否「腳鎖死再出手」。</dd>
+<dt>雙手間距</dt><dd>雙手反拍擊球瞬間兩手腕距離，超過 22 cm 判定非慣用手沒參與。</dd>
+<dt>頭部位移</dt><dd>準備到擊球之間，鼻尖相對起點的最大 3D 位移；丁克與重置球會提示「用頭帶動作」。</dd>
+<dt>分腿墊步</dt><dd>擊球前 1.0 到 0.12 秒內，雙腳踝同時離地 2.5 cm 以上視為墊步。發球、丁克、長丁克、加速球不檢查。</dd>
 </dl>
-<p>瑕疵判定以各擊球類型的理想模板為基準，並依你的體型縮放：擊球高度偏離 ±15 cm、擊球點比模板後 12 cm 以上、引拍超過 135%（抽球低於 60%）、手速低於 80%、膝蓋少彎 12° 以上、轉身低於 70%、頭部多 4 cm 以上、沒有墊步或墊步晚於擊球前 150 ms。模板是一般化的教學動作，不代表唯一正確的打法。MediaPipe 由單一鏡頭推估 3D，深度方向誤差較大；建議 120 fps 以上慢動作、固定機位從側面拍攝、全身入鏡。</p>
+<p>瑕疵判定以各擊球的理想模板為基準並依體型縮放。模板依常見教學動作建立，並非唯一正確打法；ATP（繞網柱）與 Erne（貼網突擊）屬於情境型特殊球路，需要球與場地位置資訊，本系統無法判斷。MediaPipe 由單一鏡頭推估 3D，深度方向誤差較大；建議 120 fps 以上慢動作、固定機位從側面拍攝、全身入鏡。</p>
 </details>
 </div>
 <div id="toast" hidden></div>
@@ -186,60 +193,105 @@ function interp(T,Vs,t){const n=T.length;if(t<=T[0])return Vs[0];if(t>=T[n-1])re
  return Array.isArray(b)?b.map((_,k)=>cr(a[k],b[k],c[k],d[k],u)):cr(a,b,c,d,u)}
 
 /* 座標：y 向上，網子在 +x，右手持拍者面向 +x 時右側為 +z。關鍵影格：準備、墊步、引拍、擊球前、擊球、隨揮、收拍 */
-const R=[.30,-.25,.12],RL=[.28,-.25,-.05],RP=[.6,.7,0],LA=[.02,.08,-.25],RA=[-.02,.08,.25];
+const R=[.30,-.25,.12],RL=[.28,-.25,-.05],RP=[.6,.7,0],LA=[.02,.08,-.25],RA=[-.02,.08,.25],Z7=[0,0,0,0,0,0,0];
+const fill=v=>[v,v,v,v,v,v,v];
+/* 站位（球場座標：網子 x=0，廚房線 −2.13 m，底線 −6.71 m；z 為左右） */
+const POS={baseline:{name:'底線',x:-6.95,z:.75},serveline:{name:'底線後方（右發球區）',x:-7.05,z:1.4},transition:{name:'過渡區（中場）',x:-4.3,z:.75},kitchen:{name:'廚房線',x:-2.5,z:.75}};
 const STROKES={
- drive:{name:'正手抽球',T:[0,.35,.75,.93,1.00,1.20,1.65],split:true,
-  hipRot:[90,90,55,75,95,110,115],shRot:[90,90,40,70,100,125,135],cx:[0,0,-.03,.03,.08,.10,.10],squat:[.08,.12,.10,.10,.09,.07,.06],
-  handR:[R,R,[-.25,-.10,.45],[0,-.33,.45],[.35,-.33,.30],[.40,.15,-.15],[.25,.25,-.30]],
-  handL:[RL,RL,[.20,-.15,.10],[.15,-.25,-.10],[.05,-.30,-.25],[0,-.30,-.25],[0,-.30,-.25]],
-  pad:[RP,RP,[-.3,.6,.5],[-.4,-.3,.6],[.3,.1,.9],[.3,.8,-.4],[-.2,.8,-.5]],
-  lA:[LA,LA,LA,[.25,.08,-.15],[.30,.08,-.12],[.30,.08,-.12],[.30,.08,-.12]],rA:[RA,RA,RA,RA,RA,RA,RA],
-  lYaw:[0,0,0,20,30,30,30],rYaw:[0,0,-40,-40,-20,0,0],rHeel:[0,0,0,.02,.05,.08,.08],lHeel:[0,0,0,0,0,0,0],hop:[0,.045,0,0,0,0,0]},
- backhand:{name:'反手抽球',T:[0,.35,.75,.93,1.00,1.20,1.65],split:true,
-  hipRot:[90,90,125,105,88,72,68],shRot:[90,90,140,112,85,60,55],cx:[0,0,-.03,.03,.08,.10,.10],squat:[.08,.12,.10,.10,.09,.07,.06],
-  handR:[R,R,[-.10,-.10,-.35],[.05,-.25,-.30],[.35,-.22,-.10],[.35,.10,.30],[.25,.20,.35]],
-  handL:[RL,RL,[-.05,-.10,-.30],[.05,-.22,-.28],[0,-.30,-.25],[-.05,-.30,-.28],[-.05,-.30,-.28]],
-  pad:[RP,RP,[-.4,.5,-.5],[-.2,-.3,-.9],[.3,.1,-.9],[.4,.8,.3],[.1,.9,.4]],
-  lA:[LA,LA,LA,LA,LA,LA,LA],rA:[RA,RA,RA,[.25,.08,.12],[.30,.08,.10],[.30,.08,.10],[.30,.08,.10]],
-  lYaw:[0,0,40,40,20,0,0],rYaw:[0,0,0,-20,-30,-30,-30],rHeel:[0,0,0,0,0,0,0],lHeel:[0,0,0,.02,.05,.08,.08],hop:[0,.045,0,0,0,0,0]},
- serve:{name:'發球（低手）',T:[0,.5,1.0,1.22,1.30,1.55,2.05],split:false,
+ serve:{name:'發球（低手）',pos:'serveline',T:[0,.5,1.0,1.22,1.30,1.55,2.05],split:false,
+  tips:['站在底線後方，前腳不可踩線','擊球點必須低於腰部，拍頭低於手腕','由後往前、由下往上揮拍並完整隨揮'],
   hipRot:[80,80,65,80,90,100,100],shRot:[80,80,60,80,95,110,115],cx:[-.03,-.03,-.06,0,.04,.07,.08],squat:[.03,.03,.06,.07,.07,.04,.02],
   handR:[[.25,-.25,.20],[.25,-.25,.20],[-.35,-.45,.30],[-.05,-.55,.30],[.30,-.55,.25],[.45,.05,.10],[.35,.25,-.05]],
   handL:[[.30,-.20,.10],[.32,-.18,.08],[.30,-.25,.05],[.10,-.35,-.15],[.05,-.35,-.22],[0,-.32,-.25],[0,-.32,-.25]],
   pad:[[.5,.3,.3],[.5,.3,.3],[-.3,-.8,.2],[.2,-.9,.3],[.6,-.5,.3],[.5,.7,-.1],[.3,.8,-.3]],
-  lA:[[.25,.08,-.15],[.25,.08,-.15],[.25,.08,-.15],[.25,.08,-.15],[.25,.08,-.15],[.25,.08,-.15],[.25,.08,-.15]],
-  rA:[[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.12,.08,.20],[-.10,.08,.20]],
-  lYaw:[15,15,15,15,15,15,15],rYaw:[-30,-30,-30,-25,-15,0,0],rHeel:[0,0,0,.02,.05,.09,.10],lHeel:[0,0,0,0,0,0,0],hop:[0,0,0,0,0,0,0]},
- dink:{name:'吊小球（dink）',T:[0,.35,.8,.93,1.00,1.20,1.55],split:true,
-  hipRot:[90,90,85,88,90,92,92],shRot:[90,90,80,86,92,96,96],cx:[0,0,-.01,.02,.04,.05,.05],squat:[.15,.20,.18,.19,.19,.18,.17],
-  handR:[[.30,-.30,.15],[.30,-.30,.15],[.15,-.45,.25],[.22,-.52,.25],[.42,-.50,.22],[.52,-.40,.18],[.45,-.30,.15]],
-  handL:[RL,RL,[.25,-.28,-.08],[.25,-.30,-.10],[.22,-.30,-.12],[.20,-.30,-.12],[.20,-.30,-.12]],
-  pad:[[.6,-.4,.2],[.6,-.4,.2],[.3,-.8,.4],[.5,-.7,.3],[.7,-.2,.1],[.6,.3,0],[.6,.2,0]],
-  lA:[[.05,.08,-.30],[.05,.08,-.30],[.05,.08,-.30],[.12,.08,-.28],[.14,.08,-.28],[.14,.08,-.28],[.14,.08,-.28]],rA:[[0,.08,.32],[0,.08,.32],[0,.08,.32],[0,.08,.32],[0,.08,.32],[0,.08,.32],[0,.08,.32]],
-  lYaw:[0,0,0,5,5,5,5],rYaw:[0,0,-10,-10,-5,-5,-5],rHeel:[0,0,0,0,0,0,0],lHeel:[0,0,0,0,0,0,0],hop:[0,.035,0,0,0,0,0]},
- drop:{name:'第三拍放短',T:[0,.35,.8,.95,1.02,1.25,1.65],split:true,
+  lA:fill([.25,.08,-.15]),rA:[[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.15,.08,.20],[-.12,.08,.20],[-.10,.08,.20]],
+  lYaw:fill(15),rYaw:[-30,-30,-30,-25,-15,0,0],rHeel:[0,0,0,.02,.05,.09,.10],lHeel:Z7,hop:Z7},
+ drive:{name:'第三拍抽球（正手）',pos:'baseline',T:[0,.35,.75,.93,1.00,1.20,1.65],split:true,
+  tips:['側身引拍，由下半身帶動轉髖轉肩','擊球點在身體前方、腰到胸之間','瞄準對手反手或追身，完整隨揮'],
+  hipRot:[90,90,55,75,95,110,115],shRot:[90,90,40,70,100,125,135],cx:[0,0,-.03,.03,.08,.10,.10],squat:[.08,.12,.10,.10,.09,.07,.06],
+  handR:[R,R,[-.25,-.10,.45],[0,-.33,.45],[.35,-.33,.30],[.40,.15,-.15],[.25,.25,-.30]],
+  handL:[RL,RL,[.20,-.15,.10],[.15,-.25,-.10],[.05,-.30,-.25],[0,-.30,-.25],[0,-.30,-.25]],
+  pad:[RP,RP,[-.3,.6,.5],[-.4,-.3,.6],[.3,.1,.9],[.3,.8,-.4],[-.2,.8,-.5]],
+  lA:[LA,LA,LA,[.25,.08,-.15],[.30,.08,-.12],[.30,.08,-.12],[.30,.08,-.12]],rA:fill(RA),
+  lYaw:[0,0,0,20,30,30,30],rYaw:[0,0,-40,-40,-20,0,0],rHeel:[0,0,0,.02,.05,.08,.08],lHeel:Z7,hop:[0,.045,0,0,0,0,0]},
+ backhand:{name:'反手抽球（單手）',pos:'baseline',T:[0,.35,.75,.93,1.00,1.20,1.65],split:true,
+  tips:['肩膀轉向來球，側身引拍','擊球點在前腳前方','手臂向前上方延伸隨揮'],
+  hipRot:[90,90,125,105,88,72,68],shRot:[90,90,140,112,85,60,55],cx:[0,0,-.03,.03,.08,.10,.10],squat:[.08,.12,.10,.10,.09,.07,.06],
+  handR:[R,R,[-.10,-.10,-.35],[.05,-.25,-.30],[.35,-.22,-.10],[.35,.10,.30],[.25,.20,.35]],
+  handL:[RL,RL,[-.05,-.10,-.30],[.05,-.22,-.28],[0,-.30,-.25],[-.05,-.30,-.28],[-.05,-.30,-.28]],
+  pad:[RP,RP,[-.4,.5,-.5],[-.2,-.3,-.9],[.3,.1,-.9],[.4,.8,.3],[.1,.9,.4]],
+  lA:fill(LA),rA:[RA,RA,RA,[.25,.08,.12],[.30,.08,.10],[.30,.08,.10],[.30,.08,.10]],
+  lYaw:[0,0,40,40,20,0,0],rYaw:[0,0,0,-20,-30,-30,-30],rHeel:Z7,lHeel:[0,0,0,.02,.05,.08,.08],hop:[0,.045,0,0,0,0,0]},
+ dbh:{name:'雙手反拍',pos:'baseline',T:[0,.35,.75,.93,1.00,1.20,1.65],split:true,
+  tips:['腳跟到球，身體側面迎向來球','非慣用手主導拍面方向，慣用手輔助','維持拍面角度穩定推送，不要過度發力'],
+  hipRot:[90,90,130,108,90,75,70],shRot:[90,90,150,115,88,58,52],cx:[0,0,-.03,.03,.07,.09,.09],squat:[.08,.13,.12,.12,.11,.08,.07],
+  handR:[R,R,[-.12,-.12,-.30],[.05,-.30,-.28],[.35,-.28,-.08],[.35,.10,.25],[.20,.20,.30]],
+  handL:[RL,RL,RL,RL,RL,RL,RL],
+  pad:[RP,RP,[-.4,.5,-.5],[-.2,-.3,-.9],[.3,.1,-.9],[.4,.8,.3],[.1,.9,.4]],
+  lA:fill(LA),rA:[RA,RA,[.22,.08,.12],[.28,.08,.10],[.28,.08,.10],[.28,.08,.10],[.28,.08,.10]],
+  lYaw:[0,0,40,40,25,10,10],rYaw:[0,0,-20,-30,-30,-30,-30],rHeel:Z7,lHeel:[0,0,0,.01,.03,.06,.06],hop:[0,.045,0,0,0,0,0]},
+ drop:{name:'第三拍吊球',pos:'baseline',T:[0,.35,.8,.95,1.02,1.25,1.65],split:true,
+  tips:['到位後雙腳定住再出手','由低到高提拉，讓球弧線落進對方廚房區','拍面略開、手腕穩定，用肩膀帶動'],
   hipRot:[90,90,70,82,92,100,100],shRot:[90,90,60,78,95,108,110],cx:[0,0,-.03,.02,.06,.08,.08],squat:[.10,.15,.14,.15,.14,.10,.08],
   handR:[R,R,[-.05,-.35,.40],[.10,-.50,.38],[.38,-.48,.30],[.55,-.05,.15],[.45,.10,.05]],
   handL:[RL,RL,[.22,-.20,.05],[.18,-.26,-.08],[.10,-.30,-.20],[.05,-.30,-.24],[.05,-.30,-.24]],
   pad:[RP,RP,[-.4,-.2,.6],[.1,-.7,.6],[.6,-.3,.5],[.6,.6,.2],[.4,.8,0]],
-  lA:[LA,LA,LA,[.20,.08,-.18],[.22,.08,-.18],[.22,.08,-.18],[.22,.08,-.18]],rA:[RA,RA,RA,RA,RA,RA,RA],
-  lYaw:[0,0,0,15,20,20,20],rYaw:[0,0,-30,-30,-15,0,0],rHeel:[0,0,0,.01,.03,.06,.06],lHeel:[0,0,0,0,0,0,0],hop:[0,.045,0,0,0,0,0]},
- volley:{name:'截擊（volley）',T:[0,.35,.7,.82,.86,1.0,1.35],split:true,
+  lA:[LA,LA,[.20,.08,-.18],[.20,.08,-.18],[.20,.08,-.18],[.20,.08,-.18],[.20,.08,-.18]],rA:fill(RA),
+  lYaw:[0,0,15,15,20,20,20],rYaw:[0,0,-30,-30,-15,0,0],rHeel:[0,0,0,.01,.03,.06,.06],lHeel:Z7,hop:[0,.045,0,0,0,0,0]},
+ longdink:{name:'長丁克',pos:'baseline',T:[0,.35,.8,.95,1.02,1.27,1.7],split:false,
+  tips:['移動到落點後雙腳定住','借對手來球的力量，適度向上提拉','最後用手腕輕刷製造旋轉，讓球過網快速下墜'],
+  hipRot:[90,90,76,84,92,98,98],shRot:[90,90,66,80,94,104,106],cx:[0,0,-.02,.02,.05,.07,.07],squat:[.12,.14,.14,.15,.14,.11,.09],
+  handR:[R,R,[-.02,-.38,.35],[.12,-.52,.33],[.36,-.50,.28],[.52,.02,.12],[.42,.12,.02]],
+  handL:[RL,RL,[.22,-.22,.02],[.18,-.26,-.08],[.10,-.30,-.20],[.05,-.30,-.24],[.05,-.30,-.24]],
+  pad:[RP,RP,[-.3,-.3,.6],[.1,-.75,.55],[.6,-.35,.45],[.5,.75,.1],[.4,.8,0]],
+  lA:[LA,LA,[.18,.08,-.18],[.18,.08,-.18],[.18,.08,-.18],[.18,.08,-.18],[.18,.08,-.18]],rA:fill(RA),
+  lYaw:[0,0,15,15,18,18,18],rYaw:[0,0,-25,-25,-12,0,0],rHeel:[0,0,0,.01,.02,.05,.05],lHeel:Z7,hop:Z7},
+ reset:{name:'重置球（Reset）',pos:'transition',T:[0,.35,.72,.84,.90,1.05,1.4],split:true,
+  tips:['腳要鎖死，定點後再揮拍','重心壓低，視線接近擊球點','手腕放鬆卸力，不翻腕、不用頭帶動作'],
+  hipRot:[90,90,86,88,90,91,91],shRot:[90,90,82,86,91,93,93],cx:[0,0,-.01,.01,.02,.03,.03],squat:[.14,.20,.20,.21,.21,.20,.19],
+  handR:[[.30,-.25,.15],[.30,-.25,.15],[.24,-.36,.22],[.30,-.42,.22],[.42,-.42,.20],[.48,-.38,.18],[.40,-.36,.16]],
+  handL:[RL,RL,[.26,-.30,-.08],[.26,-.32,-.10],[.24,-.32,-.12],[.22,-.32,-.12],[.22,-.32,-.12]],
+  pad:[[.5,.3,.2],[.5,.3,.2],[.5,-.3,.3],[.6,-.1,.25],[.65,.15,.2],[.6,.3,.15],[.6,.3,.1]],
+  lA:[[.05,.08,-.30],[.05,.08,-.30],[.10,.08,-.30],[.10,.08,-.30],[.10,.08,-.30],[.10,.08,-.30],[.10,.08,-.30]],rA:fill([0,.08,.32]),
+  lYaw:[0,0,5,5,5,5,5],rYaw:[0,0,-8,-8,-5,-5,-5],rHeel:Z7,lHeel:Z7,hop:[0,.04,0,0,0,0,0]},
+ dink:{name:'丁克（Dink）',pos:'kitchen',T:[0,.35,.8,.93,1.00,1.20,1.55],split:false,
+  tips:['不發力，用手臂和拍面推送','膝蓋彎曲保持低重心，由下往上平推','手腕固定放鬆，拍面略朝上'],
+  hipRot:[90,90,85,88,90,92,92],shRot:[90,90,80,86,92,96,96],cx:[0,0,-.01,.02,.04,.05,.05],squat:[.15,.17,.18,.19,.19,.18,.17],
+  handR:[[.30,-.30,.15],[.30,-.30,.15],[.15,-.45,.25],[.22,-.52,.25],[.42,-.50,.22],[.52,-.40,.18],[.45,-.30,.15]],
+  handL:[RL,RL,[.25,-.28,-.08],[.25,-.30,-.10],[.22,-.30,-.12],[.20,-.30,-.12],[.20,-.30,-.12]],
+  pad:[[.6,-.4,.2],[.6,-.4,.2],[.3,-.8,.4],[.5,-.7,.3],[.7,-.2,.1],[.6,.3,0],[.6,.2,0]],
+  lA:[[.05,.08,-.30],[.05,.08,-.30],[.14,.08,-.28],[.14,.08,-.28],[.14,.08,-.28],[.14,.08,-.28],[.14,.08,-.28]],rA:fill([0,.08,.32]),
+  lYaw:[0,0,5,5,5,5,5],rYaw:[0,0,-10,-10,-5,-5,-5],rHeel:Z7,lHeel:Z7,hop:Z7},
+ volley:{name:'截擊（Volley）',pos:'kitchen',T:[0,.35,.7,.82,.86,1.0,1.35],split:true,
+  tips:['手腕鎖死，拍面在身體前方迎擊','擋不是揮，引拍要短','瞄準對手腳下或空檔'],
   hipRot:[90,90,85,88,90,91,91],shRot:[90,90,78,86,93,96,96],cx:[0,0,-.01,.03,.05,.06,.06],squat:[.08,.12,.10,.10,.10,.09,.08],
   handR:[[.30,-.20,.15],[.30,-.20,.15],[.18,-.12,.28],[.28,-.15,.28],[.45,-.15,.25],[.50,-.16,.22],[.40,-.18,.18]],
   handL:[RL,RL,[.25,-.22,-.05],[.27,-.24,-.07],[.25,-.26,-.10],[.24,-.26,-.10],[.24,-.26,-.10]],
   pad:[[.4,.9,.2],[.4,.9,.2],[.1,.9,.4],[.4,.85,.3],[.5,.8,.2],[.55,.75,.15],[.5,.8,.1]],
-  lA:[LA,LA,LA,[.10,.08,-.25],[.12,.08,-.25],[.12,.08,-.25],[.12,.08,-.25]],rA:[RA,RA,RA,RA,RA,RA,RA],
-  lYaw:[0,0,0,5,5,5,5],rYaw:[0,0,-10,-10,-5,-5,-5],rHeel:[0,0,0,0,0,0,0],lHeel:[0,0,0,0,0,0,0],hop:[0,.04,0,0,0,0,0]}
+  lA:[LA,LA,[.10,.08,-.25],[.12,.08,-.25],[.12,.08,-.25],[.12,.08,-.25],[.12,.08,-.25]],rA:fill(RA),
+  lYaw:[0,0,5,5,5,5,5],rYaw:[0,0,-10,-10,-5,-5,-5],rHeel:Z7,lHeel:Z7,hop:[0,.04,0,0,0,0,0]},
+ speedup:{name:'加速球（Speed-Up）',pos:'kitchen',T:[0,.3,.62,.72,.76,.86,1.2],split:false,
+  tips:['從丁克姿勢出手，動作小、隱蔽性高','用前臂與手腕瞬間加速','瞄準對手肩膀或胸口'],
+  hipRot:[90,90,86,90,94,96,96],shRot:[90,90,82,90,97,100,100],cx:[0,0,-.01,.02,.04,.05,.05],squat:[.12,.13,.13,.12,.11,.10,.10],
+  handR:[[.32,-.25,.15],[.32,-.25,.15],[.24,-.22,.24],[.34,-.20,.24],[.55,-.12,.20],[.62,-.06,.16],[.45,-.15,.15]],
+  handL:[RL,RL,[.25,-.25,-.06],[.26,-.26,-.08],[.24,-.28,-.10],[.22,-.28,-.12],[.22,-.28,-.12]],
+  pad:[[.5,.6,.3],[.5,.6,.3],[.2,.7,.5],[.4,.6,.4],[.7,.6,.1],[.7,.5,0],[.6,.6,0]],
+  lA:[[.05,.08,-.28],[.05,.08,-.28],[.12,.08,-.27],[.12,.08,-.27],[.12,.08,-.27],[.12,.08,-.27],[.12,.08,-.27]],rA:fill([0,.08,.30]),
+  lYaw:[0,0,5,5,5,5,5],rYaw:[0,0,-8,-8,-5,-5,-5],rHeel:Z7,lHeel:Z7,hop:Z7}
 };
+const GROUPS=[['底線',['serve','drive','backhand','dbh','drop','longdink']],['過渡區',['reset']],['廚房線',['dink','volley','speedup']]];
 const CH_KEYS=['hipRot','shRot','cx','squat','handR','handL','pad','lA','rA','lYaw','rYaw','rHeel','lHeel','hop'];
 function makeChannels(type,p){const S=STROKES[type],st=p?p.st:1,T=S.T.map((t,i)=>i>=3?S.T[2]+(t-S.T[2])*st:t),ch={};
- CH_KEYS.forEach(k=>ch[k]={t:T,v:JSON.parse(JSON.stringify(S[k]))});ch.head={t:T,v:[0,0,0,0,0,0,0].map(()=>[0,0,0])};
- if(!p)return ch;
- ch.hipRot.v=ch.hipRot.v.map((x,i)=>i<2?x:90+(x-90)*p.rot);ch.shRot.v=ch.shRot.v.map((x,i)=>i<2?x:90+(x-90)*p.rot);
- ch.squat.v=ch.squat.v.map(x=>.02+(x-.02)*p.sq);ch.hop.v=ch.hop.v.map(x=>x*p.split);
- const h=ch.handR.v;h[2]=V.add(h[4],V.mul(V.sub(h[2],h[4]),p.bk));h[4]=V.add(h[4],[p.cf,p.hi,0]);h[3]=V.add(h[3],[p.cf*.6,p.hi*.6,0]);
- ch.head.v=[0,0,.3,.7,1,1,1].map(u=>V.mul(p.head,u));return ch}
+ CH_KEYS.forEach(k=>ch[k]={t:T,v:JSON.parse(JSON.stringify(S[k]))});ch.head={t:T,v:Z7.map(()=>[0,0,0])};ch.flex={t:T,v:Z7.slice()};
+ const two=type==='dbh';
+ if(p){ch.hipRot.v=ch.hipRot.v.map((x,i)=>i<2?x:90+(x-90)*p.rot);ch.shRot.v=ch.shRot.v.map((x,i)=>i<2?x:90+(x-90)*p.rot);
+  ch.squat.v=ch.squat.v.map(x=>.02+(x-.02)*p.sq);ch.hop.v=ch.hop.v.map(x=>x*p.split);
+  const h=ch.handR.v;h[2]=V.add(h[4],V.mul(V.sub(h[2],h[4]),p.bk));h[4]=V.add(h[4],[p.cf,p.hi,0]);h[3]=V.add(h[3],[p.cf*.6,p.hi*.6-p.lift*.3,0]);h[5]=V.add(h[5],[0,p.lift,0]);
+  ch.head.v=[0,0,.3,.7,1,1,1].map(u=>V.mul(p.head,u));ch.flex.v=[0,0,0,p.fl*.3,p.fl,p.fl*.6,0];
+  if(p.mv){const a=ch.lA.v;const fin=a[4];a[2]=a[1];a[3]=V.lerp(a[1],fin,.3);a[4]=V.lerp(a[1],fin,.6);a[5]=fin}}
+ if(two){ch.handL.v=ch.handR.v.map((h,i)=>i<2?RL:V.add(h,V.add(V.mul(V.norm(ch.pad.v[i]),.08),[0,.02,0])));
+  if(p&&p.gap)[3,4,5].forEach(i=>ch.handL.v[i]=V.add(ch.handL.v[i],[-.08,-.15,-.12]))}
+ return ch}
 function sampleCh(ch,t){const s={};for(const k in ch)s[k]=interp(ch[k].t,ch[k].v,t);return s}
 function endT(ch){const t=ch.hipRot.t;return t[t.length-1]}
 function lerpState(a,b,u){const s={};for(const k in a)s[k]=Array.isArray(a[k])?a[k].map((x,i)=>x+(b[k][i]-x)*u):a[k]+(b[k]-a[k])*u;return s}
@@ -255,7 +307,8 @@ function buildPose(s){const L=new Array(33);
  [[-.015,.03,-.02],[-.02,.032,-.035],[-.03,.03,-.05],[-.015,.03,.02],[-.02,.032,.035],[-.03,.03,.05],[-.10,.01,-.07],[-.10,.01,.07],[-.01,-.035,-.02],[-.01,-.035,.02]].forEach((o,i)=>L[i+1]=V.add(n,o));
  L[16]=V.add(sc,s.handR);L[15]=V.add(sc,s.handL);
  L[14]=ik(L[12],L[16],.29,.27,[-.2,-1,.4]);L[13]=ik(L[11],L[15],.29,.27,[-.2,-1,-.4]);
- [[15,13,17,19,21,-1],[16,14,18,20,22,1]].forEach(([w,e,p,i,t,sd])=>{const W=L[w],f=V.norm(V.sub(W,L[e]));
+ [[15,13,17,19,21,-1],[16,14,18,20,22,1]].forEach(([w,e,p,i,t,sd])=>{const W=L[w];let f=V.norm(V.sub(W,L[e]));
+  if(w===16&&s.flex){const pd=V.norm(s.pad),q=V.norm(V.sub(pd,V.mul(f,V.dot(pd,f)))),r=s.flex/DEG;f=V.norm(V.add(V.mul(f,Math.cos(r)),V.mul(q,Math.sin(r))))}
   L[p]=V.add(W,V.add(V.mul(f,.06),[0,0,.02*sd]));L[i]=V.add(W,V.add(V.mul(f,.07),[0,0,-.02*sd]));L[t]=V.add(W,V.add(V.mul(f,.04),[0,.02,0]))});
  const lA=V.add(s.lA,[0,Math.max(0,s.hop)+s.lHeel*.6,0]),rA=V.add(s.rA,[0,Math.max(0,s.hop)+s.rHeel*.6,0]);L[27]=lA;L[28]=rA;
  L[29]=V.add(lA,V.add(V.rotY([-.06,0,0],s.lYaw),[0,-.05+s.lHeel,0]));L[31]=V.add(lA,V.add(V.rotY([.17,0,0],s.lYaw),[0,-.06,0]));
@@ -266,12 +319,12 @@ function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 
 /* 示範資料：6 拍、821 影格、30 fps */
 const PROFILES=[
- {sq:1,bk:1,cf:0,hi:0,head:[.01,0,0],st:1,split:1,rot:1},
- {sq:.45,bk:1.6,cf:-.14,hi:.16,head:[.05,-.02,.02],st:1.15,split:0,rot:.75},
- {sq:.8,bk:1.1,cf:-.05,hi:0,head:[.02,-.01,0],st:1.05,split:1,rot:.95},
- {sq:.95,bk:1,cf:.02,hi:.02,head:[.08,-.04,.01],st:1.1,split:.3,rot:.9},
- {sq:.4,bk:1.7,cf:-.16,hi:.10,head:[.04,-.02,.03],st:1.2,split:1,rot:.65},
- {sq:1.1,bk:.9,cf:0,hi:-.02,head:[.02,0,.01],st:1,split:1,rot:1.05}];
+ {sq:1,bk:1,cf:0,hi:0,head:[.01,0,0],st:1,split:1,rot:1,mv:0,fl:0,lift:0,gap:0},
+ {sq:.45,bk:1.6,cf:-.14,hi:.16,head:[.05,-.02,.02],st:1.15,split:0,rot:.75,mv:1,fl:35,lift:-.10,gap:1},
+ {sq:.8,bk:1.1,cf:-.05,hi:0,head:[.02,-.01,0],st:1.05,split:1,rot:.95,mv:0,fl:0,lift:0,gap:0},
+ {sq:.95,bk:1,cf:.02,hi:.02,head:[.08,-.04,.01],st:1.1,split:.3,rot:.9,mv:0,fl:25,lift:.14,gap:0},
+ {sq:.4,bk:1.7,cf:-.16,hi:.10,head:[.04,-.02,.03],st:1.2,split:1,rot:.65,mv:1,fl:0,lift:-.08,gap:1},
+ {sq:1.1,bk:.9,cf:0,hi:-.02,head:[.02,0,.01],st:1,split:1,rot:1.05,mv:0,fl:0,lift:0,gap:0}];
 const DEMO_STARTS=[.9,5.3,9.7,14.1,18.5,22.9];
 function genDemo(type){const fps=30,N=821,chs=PROFILES.map(p=>makeChannels(type,p)),rng=mulberry32(11),frames=[];
  for(let f=0;f<N;f++){const t=f/fps;let s=null;
@@ -292,7 +345,7 @@ function detectContacts(sp,fps){const mx=Math.max(...sp),thr=Math.max(.8,.45*mx)
 function unwrap(a){const o=[a[0]];for(let i=1;i<a.length;i++){let d=a[i]-a[i-1];while(d>180)d-=360;while(d<-180)d+=360;o.push(o[i-1]+d)}return o}
 function facing(L){const s=V.sub(L[11],L[12]);let n=V.norm([-s[2],0,s[0]]);const sc=V.mid(L[11],L[12]);if(V.dot(n,V.sub(L[0],sc))<0)n=V.mul(n,-1);return n}
 function angle3(a,b,c){const u=V.norm(V.sub(a,b)),v=V.norm(V.sub(c,b));return Math.acos(Math.max(-1,Math.min(1,V.dot(u,v))))*DEG}
-function computeMetrics(frames,fps,s,imp,d){const P=f=>frames[f].lm,n=frames.length,Li=P(imp);
+function computeMetrics(frames,fps,s,imp,d){const P=f=>frames[f].lm,n=frames.length,Li=P(imp),el=d===16?14:13,ix=d===16?20:19,cl=k=>Math.max(0,Math.min(n-1,k));
  const nF=facing(P(s)),hipC=f=>V.mid(P(f)[23],P(f)[24]),fwd=f=>V.dot(V.sub(P(f)[d],hipC(f)),nF);
  const contactH=Li[d][1]*100,navel=hipC(imp)[1]+.08,belowWaist=(navel-Li[d][1])*100,contactFwd=fwd(imp)*100;
  let mn=Infinity;for(let f=s;f<=imp;f++)mn=Math.min(mn,fwd(f));const backswing=(fwd(imp)-mn)*100;
@@ -301,22 +354,46 @@ function computeMetrics(frames,fps,s,imp,d){const P=f=>frames[f].lm,n=frames.len
  const yaw=(p,q)=>Math.atan2(p[2]-q[2],p[0]-q[0])*DEG;let sh=[];for(let f=s;f<=imp;f++)sh.push(yaw(P(f)[11],P(f)[12]));sh=unwrap(sh);
  const shoulderRot=Math.max(...sh)-Math.min(...sh);
  const n0=P(s)[0];let head=0;for(let f=s;f<=imp;f++)head=Math.max(head,V.len(V.sub(P(f)[0],n0)));
+ /* 揮拍路徑仰角：擊球前 1 格到後 2 格的手腕位移仰角 */
+ const dv=V.sub(P(cl(imp+2))[d],P(cl(imp-1))[d]),pathAngle=Math.atan2(dv[1],Math.hypot(dv[0],dv[2]))*DEG;
+ /* 隨揮：擊球後 0.25 秒內手腕移動路徑長 */
+ let fol=0;for(let f=imp;f<cl(imp+Math.round(.25*fps));f++)fol+=V.len(V.sub(P(f+1)[d],P(f)[d]));const followThrough=fol*100;
+ /* 手腕翻動：前臂與手掌夾角在擊球前 0.2 秒到後 0.07 秒內的變化範圍 */
+ let fmin=1e9,fmax=-1e9;for(let f=cl(imp-Math.round(.2*fps));f<=cl(imp+Math.round(.07*fps));f++){const a=180-angle3(P(f)[el],P(f)[d],P(f)[ix]);fmin=Math.min(fmin,a);fmax=Math.max(fmax,a)}
+ const wristFlex=fmax-fmin;
+ /* 擊球瞬間腳步速度：擊球前後各 1 格，兩腳踝中較快者 */
+ let fs=0;for(let f=cl(imp-1);f<=cl(imp+1);f++){for(const k of[27,28]){const v=V.len(V.sub(P(cl(f+1))[k],P(cl(f-1))[k]))*fps/2;fs+=v/6}}const footSpeed=fs*100;
+ const handGap=V.len(V.sub(Li[15],Li[16]))*100;
  /* 分腿墊步：擊球前 1.0～0.12 秒內，雙腳踝同時離地 2.5 cm 以上 */
- const a=Math.max(0,imp-Math.round(1.0*fps)),b=Math.max(a,imp-Math.round(.12*fps));let base=Infinity;
- for(let f=a;f<=imp;f++)base=Math.min(base,Math.max(P(f)[27][1],P(f)[28][1])>-9?Math.min(P(f)[27][1],P(f)[28][1]):base);
- let bestLift=0,bestF=-1;const b27=Math.min(...frames.slice(a,imp+1).map(x=>x.lm[27][1])),b28=Math.min(...frames.slice(a,imp+1).map(x=>x.lm[28][1]));
- for(let f=a;f<=b;f++){const lift=Math.min(P(f)[27][1]-b27,P(f)[28][1]-b28);if(lift>bestLift){bestLift=lift;bestF=f}}
+ const a=Math.max(0,imp-Math.round(1.0*fps)),b=Math.max(a,imp-Math.round(.12*fps));
+ const b27=Math.min(...frames.slice(a,imp+1).map(x=>x.lm[27][1])),b28=Math.min(...frames.slice(a,imp+1).map(x=>x.lm[28][1]));
+ let bestLift=0,bestF=-1;for(let f=a;f<=b;f++){const lift=Math.min(P(f)[27][1]-b27,P(f)[28][1]-b28);if(lift>bestLift){bestLift=lift;bestF=f}}
  const splitMs=bestLift>.025?(imp-bestF)/fps*1000:null;
- return{contactH,belowWaist,contactFwd,backswing,wristPeak,paddleKmh:wristPeak*1.5*3.6,kneeFlex,shoulderRot,head:head*100,splitMs,facing:nF}}
-function flawsOf(m,T,type){const F=[];
- if(type==='serve'){if(m.belowWaist<0)F.push('擊球點高於腰部');else if(m.belowWaist<5)F.push('擊球點接近腰線')}else if(m.contactH>T.contactH+15)F.push('擊球點過高');else if(m.contactH<T.contactH-15)F.push('擊球點過低');
- if(m.contactFwd<T.contactFwd-12)F.push('擊球點太靠後');
- if(m.backswing>T.backswing*1.35+8)F.push('引拍過大');else if(['drive','backhand','drop'].includes(type)&&m.backswing<T.backswing*.6)F.push('引拍不足');
- if(m.wristPeak<T.wristPeak*.8&&['drive','backhand','serve'].includes(type))F.push('揮拍速度偏慢');
- if(m.kneeFlex<T.kneeFlex-12)F.push('膝蓋太直');
- if(['drive','backhand','drop'].includes(type)&&m.shoulderRot<T.shoulderRot*.7)F.push('轉身不足');
- if(m.head>T.head+4)F.push('頭部晃動');
- if(STROKES[type].split){if(m.splitMs==null)F.push('未做分腿墊步');else if(m.splitMs<150)F.push('墊步太晚')}
+ return{contactH,belowWaist,contactFwd,backswing,wristPeak,paddleKmh:wristPeak*1.5*3.6,kneeFlex,shoulderRot,head:head*100,pathAngle,followThrough,wristFlex,footSpeed,handGap,splitMs,facing:nF}}
+const IN=(t,l)=>l.includes(t);
+const FEET_LOCK=['reset','dink','longdink','drop','volley'],WRIST_QUIET=['dink','reset','volley','drop'],LIFT=['drop','longdink','dink','reset'],
+ FOLLOW=['drive','backhand','dbh','drop','longdink','serve'],POWER=['drive','backhand','dbh','serve'],TURN=['drive','backhand','dbh','drop'],BIGBACK=['drive','backhand','dbh'];
+/* 瑕疵名稱 → 對應數據欄位 */
+const FK={};
+function flawsOf(m,T,type){const F=[],add=(n,k)=>{F.push(n);FK[n]=k};
+ if(type==='serve'){if(m.belowWaist<0)add('擊球點高於腰部（違規）','contactH');else if(m.belowWaist<5)add('擊球點接近腰線','contactH')}
+ else if(m.contactH>T.contactH+15)add(type==='speedup'?'擊球點過高':'擊球點過高（球易浮高）','contactH');else if(m.contactH<T.contactH-15)add('擊球點過低','contactH');
+ if(m.contactFwd<T.contactFwd-12)add('擊球點太靠後（沒在身體前方）','contactFwd');
+ if(m.backswing>T.backswing*1.35+6)add(IN(type,['dink','reset','volley'])?'引拍過大（不是推送／擋球）':type==='speedup'?'引拍過大（易被看穿）':'引拍過大','backswing');
+ else if(IN(type,BIGBACK)&&m.backswing<T.backswing*.6)add('引拍不足','backswing');
+ if(type==='speedup'&&m.wristPeak<T.wristPeak*.8)add('加速不足','paddleKmh');
+ else if(IN(type,POWER)&&m.wristPeak<T.wristPeak*.8)add('揮拍速度偏慢','paddleKmh');
+ else if(type==='reset'&&m.wristPeak>T.wristPeak*1.4)add('卸力不足（揮拍太大力）','paddleKmh');
+ else if(type==='dink'&&m.wristPeak>T.wristPeak*1.4)add('發力過大','paddleKmh');
+ if(m.kneeFlex<T.kneeFlex-12)add('重心太高（膝蓋太直）','kneeFlex');
+ if(IN(type,TURN)&&m.shoulderRot<T.shoulderRot*.7)add(type==='dbh'?'側身不足':'轉身不足','shoulderRot');
+ if(IN(type,LIFT)){if(m.pathAngle<T.pathAngle-10)add('提拉不足（球易下網）','pathAngle');else if(m.pathAngle>T.pathAngle+15)add('往上撈（球易飄高）','pathAngle')}
+ if(IN(type,FOLLOW)&&m.followThrough<T.followThrough*.6)add('隨揮不足','followThrough');
+ if(IN(type,WRIST_QUIET)&&m.wristFlex>T.wristFlex+20)add(type==='volley'?'手腕沒鎖住':'手腕翻動過多','wristFlex');
+ if(IN(type,FEET_LOCK)&&m.footSpeed>Math.max(35,T.footSpeed*2))add('移動中擊球（腳沒定住）','footSpeed');
+ if(type==='dbh'&&m.handGap>22)add('雙手分離（非慣用手沒參與）','handGap');
+ if(m.head>T.head+4)add(IN(type,['reset','dink'])?'頭部晃動（用頭帶動作）':'頭部晃動','head');
+ if(STROKES[type].split){if(m.splitMs==null)add('未做分腿墊步','splitMs');else if(m.splitMs<150)add('墊步太晚','splitMs')}
  return F}
 function bodySize(L){return V.len(V.sub(V.mid(L[11],L[12]),V.mid(L[23],L[24])))+(V.len(V.sub(L[23],L[25]))+V.len(V.sub(L[24],L[26])))/2+(V.len(V.sub(L[25],L[27]))+V.len(V.sub(L[26],L[28])))/2}
 const TPL={};
@@ -325,7 +402,7 @@ function tplRef(type){if(TPL[type])return TPL[type];const ch=makeChannels(type,n
  const s=Math.max(0,imp-Math.round(1.1*fps));
  return TPL[type]={ch,impactT:-.5+imp/fps,m:computeMetrics(fr,fps,s,imp,16),size:bodySize(buildPose(stateAtLocal(ch,0)).lm)}}
 function tplPose(type,lt){return buildPose(stateAtLocal(tplRef(type).ch,lt))}
-function tplScaled(type,sc){const T={...tplRef(type).m};['contactH','belowWaist','contactFwd','backswing','head','wristPeak','paddleKmh'].forEach(k=>T[k]*=sc);return T}
+function tplScaled(type,sc){const T={...tplRef(type).m};['contactH','belowWaist','contactFwd','backswing','head','wristPeak','paddleKmh','followThrough','footSpeed'].forEach(k=>T[k]*=sc);return T}
 const mirZ=(q,m)=>m?[q[0],q[1],-q[2]]:q;
 function alignFor(sess,s,imp,m){const fr=sess.frames,type=sess.type,ref=tplRef(type);
  const sz=[];for(let f=s;f<=imp;f++)sz.push(bodySize(fr[f].lm));sz.sort((a,b)=>a-b);const sc=sz[sz.length>>1]/ref.size;
@@ -352,23 +429,33 @@ function init3D(){
  const sc=new THREE.Scene();R3.sc=sc;R3.cam=new THREE.PerspectiveCamera(38,1,.05,60);
  sc.add(new THREE.HemisphereLight(0xffffff,0x445566,.95));const dl=new THREE.DirectionalLight(0xffffff,.55);dl.position.set(2,4,3);sc.add(dl);
  R3.grid=new THREE.GridHelper(6,24);sc.add(R3.grid);
- R3.courtMat=new THREE.MeshBasicMaterial({color:0x2f6fa8});const court=new THREE.Mesh(new THREE.PlaneGeometry(6.1,6.1),R3.courtMat);court.rotation.x=-Math.PI/2;court.position.set(.6,.001,0);sc.add(court);
- R3.lineMat=new THREE.MeshBasicMaterial({color:0xffffff});[[.45,0,.05,6.1],[-2.4,0,.05,6.1],[-1,0,2.9,.05]].forEach(([x,y,w,d])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),R3.lineMat);m.rotation.x=-Math.PI/2;m.position.set(x,.003,y);sc.add(m)});
- R3.netMat=new THREE.MeshBasicMaterial({color:0x222222,transparent:true,opacity:.35,side:THREE.DoubleSide});const net=new THREE.Mesh(new THREE.PlaneGeometry(6.1,.86),R3.netMat);net.rotation.y=Math.PI/2;net.position.set(2.58,.43,0);sc.add(net);
+ buildCourt(sc);
  R3.act=makeSkel(1);R3.tpl=makeSkel(.55);sc.add(R3.act.g,R3.tpl.g);
  R3.trailA=makeLine();R3.trailT=makeLine();sc.add(R3.trailA,R3.trailT);
- R3.orb={th:.9,ph:1.2,r:3.6,tg:new THREE.Vector3(.2,.85,0)};
+ R3.orb={th:.9,ph:1.15,r:4.4,tg:new THREE.Vector3(.4,.8,0)};
  const ptr=new Map();let pd=0;
  r.domElement.addEventListener('pointerdown',e=>{r.domElement.setPointerCapture(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY])});
  r.domElement.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;const p=ptr.get(e.pointerId);
   if(ptr.size===1){R3.orb.th-=(e.clientX-p[0])*.008;R3.orb.ph=Math.min(1.52,Math.max(.12,R3.orb.ph-(e.clientY-p[1])*.008))}
   ptr.set(e.pointerId,[e.clientX,e.clientY]);
-  if(ptr.size===2){const [a,b]=[...ptr.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pd)R3.orb.r=Math.min(8,Math.max(1.6,R3.orb.r*pd/d));pd=d}
+  if(ptr.size===2){const [a,b]=[...ptr.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pd)R3.orb.r=Math.min(14,Math.max(1.6,R3.orb.r*pd/d));pd=d}
   S.dirty=true});
  const up=e=>{ptr.delete(e.pointerId);pd=0};r.domElement.addEventListener('pointerup',up);r.domElement.addEventListener('pointercancel',up);
- r.domElement.addEventListener('wheel',e=>{e.preventDefault();R3.orb.r=Math.min(8,Math.max(1.6,R3.orb.r*(1+e.deltaY*.001)));S.dirty=true},{passive:false});
+ r.domElement.addEventListener('wheel',e=>{e.preventDefault();R3.orb.r=Math.min(14,Math.max(1.6,R3.orb.r*(1+e.deltaY*.001)));S.dirty=true},{passive:false});
  new ResizeObserver(()=>{const w=el.clientWidth,h=el.clientHeight;r.setSize(w,h);R3.cam.aspect=w/h;R3.cam.updateProjectionMatrix();S.dirty=true}).observe(el);
  applyTheme3D()}
+function buildCourt(sc){const g=new THREE.Group();R3.court=g;
+ R3.surMat=new THREE.MeshBasicMaterial({color:0x3f8a55});const sur=new THREE.Mesh(new THREE.PlaneGeometry(20,12),R3.surMat);sur.rotation.x=-Math.PI/2;g.add(sur);
+ R3.courtMat=new THREE.MeshBasicMaterial({color:0x2f6fa8});const ct=new THREE.Mesh(new THREE.PlaneGeometry(13.41,6.1),R3.courtMat);ct.rotation.x=-Math.PI/2;ct.position.y=.002;g.add(ct);
+ R3.lineMat=new THREE.MeshBasicMaterial({color:0xffffff});const ln=(x,z,w,d)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),R3.lineMat);m.rotation.x=-Math.PI/2;m.position.set(x,.004,z);g.add(m)};
+ [-6.705,6.705,-2.13,2.13].forEach(x=>ln(x,0,.05,6.1));[-3.05,3.05].forEach(z=>ln(0,z,13.41,.05));ln(-4.4175,0,4.575,.05);ln(4.4175,0,4.575,.05);
+ R3.kitMat=new THREE.MeshBasicMaterial({color:0x3b82c4,transparent:true,opacity:.35});[-1.065,1.065].forEach(x=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(2.13,6.1),R3.kitMat);m.rotation.x=-Math.PI/2;m.position.set(x,.003,0);g.add(m)});
+ R3.netMat=new THREE.MeshBasicMaterial({color:0x111111,transparent:true,opacity:.35,side:THREE.DoubleSide});const net=new THREE.Mesh(new THREE.PlaneGeometry(6.7,.86),R3.netMat);net.rotation.y=Math.PI/2;net.position.set(0,.43,0);g.add(net);
+ const post=new THREE.CylinderGeometry(.03,.03,.91,8);[-3.35,3.35].forEach(z=>{const m=new THREE.Mesh(post,R3.lineMat);m.position.set(0,.455,z);g.add(m)});
+ sc.add(g)}
+function setCourt(){if(!R3.court||!S.sess)return;const P=POS[STROKES[S.sess.type].pos],w=S.sess.swings[0];
+ const al=S.sess.source==='demo'||!w?{rot:0,mir:false,off:[0,0,0]}:w.align,v=V.rotY(mirZ([-P.x,0,-P.z],al.mir),al.rot);
+ R3.court.rotation.y=al.rot*Math.PI/180*(1)+0;R3.court.scale.z=al.mir?-1:1;R3.court.position.set(v[0]+al.off[0],0,v[2]+al.off[2]);S.dirty=true}
 function makeLine(){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(3*120),3));g.setDrawRange(0,0);
  return new THREE.Line(g,new THREE.LineBasicMaterial({transparent:true,opacity:.9}))}
 function makeSkel(op){const g=new THREE.Group();
@@ -394,7 +481,7 @@ function applyTheme3D(){if(!R3.r)return;const ca=new THREE.Color(css('--act')),c
  [[R3.act,ca],[R3.tpl,ct]].forEach(([k,c])=>{k.mat.color.copy(c);k.mat.emissive.copy(c);k.batMat.color.copy(c).lerp(new THREE.Color(css('--chalk')),.35)});
  R3.trailA.material.color.copy(ca);R3.trailT.material.color.copy(ct);
  R3.sc.remove(R3.grid);R3.grid=new THREE.GridHelper(6,24,new THREE.Color(css('--grid-a')),new THREE.Color(css('--grid-b')));R3.sc.add(R3.grid);
- R3.courtMat.color=new THREE.Color(css('--dirt'));R3.lineMat.color=new THREE.Color(css('--chalk'));S.dirty=true}
+ R3.courtMat.color=new THREE.Color(css('--dirt'));R3.surMat.color=new THREE.Color(css('--sur'));R3.lineMat.color=new THREE.Color(css('--chalk'));S.dirty=true}
 function cam3D(){const o=R3.orb,c=R3.cam;c.position.set(o.tg.x+o.r*Math.sin(o.ph)*Math.sin(o.th),o.tg.y+o.r*Math.cos(o.ph),o.tg.z+o.r*Math.sin(o.ph)*Math.cos(o.th));c.lookAt(o.tg)}
 
 /* ---------- 姿勢取樣 ---------- */
@@ -418,7 +505,9 @@ function draw2D(fr){const cv=$('#cv2d'),box=$('#vbox'),dpr=Math.min(devicePixelR
   const gy=H*.88,k=H/2.2,cx=W*.42;const pr=p=>{const s=1+p[2]*.09;return[cx+(p[0]-.1)*k*s,gy-p[1]*k*s]};
   const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,css('--sky'));g.addColorStop(.62,css('--sky2'));g.addColorStop(.62,css('--dirt'));g.addColorStop(1,css('--dirt2'));
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle=css('--chalk');ctx.globalAlpha=.55;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-1.3*k,gy+.02*k);ctx.lineTo(cx+2.6*k,gy+.02*k);ctx.stroke();ctx.fillStyle=css('--chalk');ctx.globalAlpha=.25;ctx.fillRect(cx+2.5*k,gy-.86*k,.04*k,.86*k);ctx.globalAlpha=1;
+  ctx.strokeStyle=css('--chalk');ctx.globalAlpha=.55;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-1.3*k,gy+.02*k);ctx.lineTo(cx+2.6*k,gy+.02*k);ctx.stroke();ctx.globalAlpha=1;{const P=POS[STROKES[S.sess.type].pos];ctx.font='600 12px var(--body),sans-serif';ctx.textAlign='center';
+   [[-6.705,'底線'],[-2.13,'廚房線'],[0,'網']].forEach(([x,t])=>{const X=cx+(x-P.x)*k;if(X<-10||X>W+10)return;ctx.fillStyle=css('--chalk');
+    if(t==='網'){ctx.globalAlpha=.35;ctx.fillRect(X-2,gy-.86*k,4,.86*k);ctx.globalAlpha=1}else ctx.fillRect(X-3,gy-2,6,8);ctx.fillText(t,X,gy+22)})}ctx.globalAlpha=1;
   const p=actPose(fr),P=p.lm.map(pr);
   if(p.pad){const A=pr(p.pad[0]),B=pr(p.pad[1]),M=[A[0]+(B[0]-A[0])*.4,A[1]+(B[1]-A[1])*.4];ctx.strokeStyle=css('--chalk');ctx.lineWidth=lw*.9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(...A);ctx.lineTo(...M);ctx.stroke();
    ctx.save();ctx.translate((M[0]+B[0])/2,(M[1]+B[1])/2);ctx.rotate(Math.atan2(B[1]-M[1],B[0]-M[0]));ctx.fillStyle=css('--chalk');ctx.beginPath();ctx.ellipse(0,0,Math.hypot(B[0]-M[0],B[1]-M[1])/2,k*.09,0,0,7);ctx.fill();ctx.restore()}
@@ -456,32 +545,40 @@ function drawOverlay(){const cv=$('#ov'),dpr=Math.min(devicePixelRatio,2),W=cv.c
 const fmtS=v=>v==null?'未偵測':fmt(v,0);
 const SPLITTY=ty=>STROKES[ty].split;
 const METRICS=[
- {k:'contactH',t:'擊球點高度',u:'cm',d:0,sub:m=>m.belowWaist>=0?'腰線以下 '+fmt(m.belowWaist,0)+' cm':'高於腰線 '+fmt(-m.belowWaist,0)+' cm',st:(m,T,ty)=>ty==='serve'?m.belowWaist<5:(m.contactH>T.contactH+15||m.contactH<T.contactH-15)},
- {k:'contactFwd',t:'擊球點前後',u:'cm',d:0,sub:()=>'手腕在骨盆前方的距離',st:(m,T)=>m.contactFwd<T.contactFwd-12},
- {k:'backswing',t:'引拍幅度',u:'cm',d:0,sub:()=>'引拍最後點到擊球點',st:(m,T,ty)=>m.backswing>T.backswing*1.35+8||(['drive','backhand','drop'].includes(ty)&&m.backswing<T.backswing*.6)},
- {k:'paddleKmh',t:'揮拍速度',u:'km/h',d:0,sub:m=>'手腕峰值 '+fmt(m.wristPeak)+' m/s（拍速為估計）',st:(m,T,ty)=>['drive','backhand','serve'].includes(ty)&&m.wristPeak<T.wristPeak*.8},
- {k:'kneeFlex',t:'膝蓋彎曲',u:'°',d:0,sub:()=>'擊球瞬間雙膝平均屈曲角',st:(m,T)=>m.kneeFlex<T.kneeFlex-12},
- {k:'shoulderRot',t:'上半身旋轉',u:'°',d:0,sub:()=>'引拍到擊球的肩線轉角',st:(m,T,ty)=>['drive','backhand','drop'].includes(ty)&&m.shoulderRot<T.shoulderRot*.7},
- {k:'head',t:'頭部位移',u:'cm',d:1,sub:()=>'數值越小越穩定',st:(m,T)=>m.head>T.head+4},
- {k:'splitMs',t:'分腿墊步',u:'ms',d:0,sub:()=>'擊球前多久完成墊步',st:(m,T,ty)=>SPLITTY(ty)&&(m.splitMs==null||m.splitMs<150)}
-];
+ {k:'contactH',t:'擊球點高度',c:'高度 cm',u:'cm',d:0,sub:m=>m.belowWaist>=0?'腰線以下 '+fmt(m.belowWaist,0)+' cm':'高於腰線 '+fmt(-m.belowWaist,0)+' cm'},
+ {k:'contactFwd',t:'擊球點前後',c:'前後 cm',u:'cm',d:0,sub:()=>'手腕在骨盆前方的距離'},
+ {k:'backswing',t:'引拍幅度',c:'引拍 cm',u:'cm',d:0,sub:()=>'引拍最後點到擊球點'},
+ {k:'paddleKmh',t:'揮拍速度',c:'拍速 km/h',u:'km/h',d:0,sub:m=>'手腕峰值 '+fmt(m.wristPeak)+' m/s（拍速為估計）'},
+ {k:'kneeFlex',t:'膝蓋彎曲',c:'膝蓋 °',u:'°',d:0,sub:()=>'擊球瞬間雙膝平均屈曲角'},
+ {k:'shoulderRot',t:'上半身旋轉',c:'轉身 °',u:'°',d:0,show:ty=>IN(ty,TURN)||ty==='serve',sub:()=>'引拍到擊球的肩線轉角'},
+ {k:'pathAngle',t:'揮拍路徑仰角',c:'路徑 °',u:'°',d:0,show:ty=>IN(ty,LIFT)||ty==='speedup'||ty==='serve',sub:()=>'正值代表由下往上提拉'},
+ {k:'followThrough',t:'隨揮長度',c:'隨揮 cm',u:'cm',d:0,show:ty=>IN(ty,FOLLOW),sub:()=>'擊球後 0.25 秒手腕移動距離'},
+ {k:'wristFlex',t:'手腕翻動',c:'手腕 °',u:'°',d:0,show:ty=>IN(ty,WRIST_QUIET)||ty==='longdink'||ty==='speedup',sub:()=>'擊球前後前臂與手掌夾角變化'},
+ {k:'footSpeed',t:'擊球時腳步',c:'腳步 cm/s',u:'cm/s',d:0,show:ty=>IN(ty,FEET_LOCK),sub:()=>'越低代表腳越穩定'},
+ {k:'handGap',t:'雙手間距',c:'雙手 cm',u:'cm',d:0,show:ty=>ty==='dbh',sub:()=>'雙手反拍應小於 22 cm'},
+ {k:'head',t:'頭部位移',c:'頭部 cm',u:'cm',d:1,sub:()=>'數值越小越穩定'},
+ {k:'splitMs',t:'分腿墊步',c:'墊步 ms',u:'ms',d:0,show:ty=>STROKES[ty].split,sub:()=>'墊步最高點到擊球的時間'}];
+const shownM=ty=>METRICS.filter(x=>!x.show||x.show(ty));
 function avgM(ws){if(!ws.length)return null;const o={};for(const k in ws[0].m){if(k==='facing')continue;const vs=ws.map(w=>w.m[k]).filter(v=>typeof v==='number');o[k]=vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null}return o}
 const meanSc=ws=>ws.length?ws.reduce((a,w)=>a+w.align.sc,0)/ws.length:1;
 function selWs(){return S.sel==='avg'?S.sess.swings.filter(w=>w.include):S.sess.swings.filter(w=>w.id===S.sel)}
 function curT(){return tplScaled(S.sess.type,meanSc(selWs()))}
 function curM(){if(S.sel==='avg')return avgM(S.sess.swings.filter(w=>w.include));const w=S.sess.swings.find(w=>w.id===S.sel);return w&&w.m}
+function curF(m,T){if(S.sel==='avg')return flawsOf(m,T,S.sess.type);const w=S.sess.swings.find(w=>w.id===S.sel);return w?w.flaws:[]}
 function renderMetrics(){const m=curM(),T=curT(),ty=S.sess.type,el=$('#metrics');
  if(!m){el.innerHTML='<p class="empty">還沒有可計算的擊球。</p>';return}
- const n=S.sess.swings.filter(w=>w.include).length;
- $('#mTitle').innerHTML=(S.sel==='avg'?`${n} 拍平均`:`第 ${S.sel} 拍`)+`<small>${STROKES[ty].name}</small>`;
- el.innerHTML=METRICS.filter(x=>x.k!=='splitMs'||SPLITTY(ty)).map(x=>{const v=m[x.k],bad=x.st(m,T,ty),tv=T[x.k],d=(v==null||tv==null)?null:v-tv;
+ const n=S.sess.swings.filter(w=>w.include).length,F=curF(m,T);
+ $('#mTitle').innerHTML=(S.sel==='avg'?`${n} 拍平均`:`第 ${S.sel} 拍`)+`<small>${STROKES[ty].name}・${POS[STROKES[ty].pos].name}</small>`;
+ el.innerHTML=shownM(ty).map(x=>{const v=m[x.k],bad=F.some(f=>FK[f]===x.k),tv=T[x.k],d=(v==null||tv==null)?null:v-tv;
   return`<div class="mc ${bad?'bad':'ok'}"><div class="mt">${x.t}</div><div class="mv">${v==null?'未偵測':fmt(v,x.d)+`<small>${x.u}</small>`}</div>
-  <div class="mi"><span class="tp">理想 ${tv==null?'–':fmt(tv,x.d)}</span><span class="dl">${d==null?'':(d>=0?'+':'')+fmt(d,x.d)}</span></div><div class="ms">${x.sub(m)}</div></div>`}).join('')}
+  <div class="mi"><span class="tp">理想 ${tv==null?'–':fmt(tv,x.d)}</span><span class="dl">${d==null?'':(d>=0?'+':'')+fmt(d,x.d)}</span></div><div class="ms">${x.sub(m)}</div></div>`}).join('');
+ const S0=STROKES[ty];$('#tips').innerHTML=`<h3>動作要點<small>${S0.name}・站位：${POS[S0.pos].name}</small></h3><ul>${S0.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`}
 function renderChips(){$('#chips').innerHTML=`<button class="chip ${S.sel==='avg'?'on':''}" data-s="avg">平均</button>`+
  S.sess.swings.map(w=>`<button class="chip ${S.sel===w.id?'on':''} ${w.include?'':'off'}" data-s="${w.id}">第 ${w.id} 拍${w.flaws.length?`<i>${w.flaws.length}</i>`:''}</button>`).join('');
  $$('#chips .chip').forEach(b=>b.onclick=()=>selectSwing(b.dataset.s==='avg'?'avg':+b.dataset.s))}
 function renderTable(){const W=S.sess.swings,inc=W.filter(w=>w.include),T=tplScaled(S.sess.type,meanSc(inc)),A=avgM(inc);
- const cells=m=>`<td>${fmt(m.contactH,0)}</td><td>${fmt(m.contactFwd,0)}</td><td>${fmt(m.backswing,0)}</td><td>${fmt(m.paddleKmh,0)}</td><td>${fmt(m.kneeFlex,0)}°</td><td>${fmt(m.shoulderRot,0)}°</td><td>${fmt(m.head)}</td><td>${SPLITTY(S.sess.type)?fmtS(m.splitMs):'–'}</td>`;
+ const ty=S.sess.type,cols=shownM(ty);$('#thead').innerHTML=`<tr><th>納入</th><th>拍</th><th>擊球影格</th>${cols.map(x=>`<th>${x.c}</th>`).join('')}<th>瑕疵</th></tr>`;
+ const cells=m=>cols.map(x=>`<td>${x.k==='splitMs'?fmtS(m.splitMs):fmt(m[x.k],x.k==='head'?1:0)}</td>`).join('');
  $('#tbody').innerHTML=W.map(w=>`<tr class="${S.sel===w.id?'on':''}" data-s="${w.id}"><td><input type="checkbox" aria-label="納入平均" ${w.include?'checked':''} data-i="${w.id}"></td><td>${w.id}</td><td>${w.impact}</td>${cells(w.m)}<td class="tags">${w.flaws.map(f=>`<span>${f}</span>`).join('')||'<em>無明顯瑕疵</em>'}</td></tr>`).join('')+
   (A?`<tr class="avg"><td></td><td colspan="2">平均（${inc.length}）</td>${cells(A)}<td></td></tr>`:'')+
   `<tr class="tplr"><td></td><td colspan="2">理想模板</td>${cells(T)}<td></td></tr>`;
@@ -517,7 +614,7 @@ function render(){const fr=S.frame,fi=Math.round(fr),N=S.sess.frames.length;
 /* ---------- 載入資料 ---------- */
 function loadSession(sess){analyzeSession(sess);S.sess=sess;S.sel='avg';S.frame=0;
  $('#scrub').max=sess.frames.length-1;
- $('#stype').value=sess.type;$('#status').textContent=(sess.source==='demo'?'示範資料':'你的影片')+`・${STROKES[sess.type].name}：${sess.swings.length} 拍，${sess.frames.length} 影格，${sess.fps} fps${sess.source!=='demo'&&sess.dom===15?'，偵測為左手持拍':''}`;
+ setCourt();$('#stype').value=sess.type;$('#status').textContent=(sess.source==='demo'?'示範資料':'你的影片')+`・${STROKES[sess.type].name}（${POS[STROKES[sess.type].pos].name}）：${sess.swings.length} 拍，${sess.frames.length} 影格，${sess.fps} fps${sess.source!=='demo'&&sess.dom===15?'，偵測為左手持拍':''}`;
  $('#vid').hidden=sess.source==='demo';$('#vtag').textContent=sess.source==='demo'?'模擬畫面（示範資料沒有真實影片）':'原始影片＋2D 骨架';
  if(!sess.swings.length)toast('沒有偵測到擊球：影片中手腕速度沒有明顯峰值。請確認全身入鏡、光線足夠，建議 60 fps 以上。');
  refreshData();seek(sess.swings[0]?sess.swings[0].start:0)}
@@ -583,6 +680,7 @@ function loadYT(){const r=parseYT($('#yturl').value);if(!r){toast('看不懂這�
 
 /* ---------- 綁定 ---------- */
 function bind(){
+ $('#stype').innerHTML=GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}">${STROKES[k].name}</option>`).join('')}</optgroup>`).join('');
  $('#play').onclick=()=>setPlay(!S.playing);
  $('#prev').onclick=()=>{setPlay(false);seek(Math.round(S.frame)-1)};$('#next').onclick=()=>{setPlay(false);seek(Math.round(S.frame)+1)};
  $('#toImpact').onclick=()=>{setPlay(false);const w=S.sel!=='avg'?S.sess.swings.find(w=>w.id===S.sel):(swingAt(S.frame)||S.sess.swings[0]);if(w)seek(w.impact)};
@@ -605,5 +703,5 @@ function bind(){
  new ResizeObserver(()=>{if(S.sess){drawOverlay();S.dirty=true}}).observe(document.body);
  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{applyTheme3D();if(S.sess)drawOverlay()});
  $('#vid').addEventListener('seeked',()=>S.dirty=true)}
-init3D();bind();loadSession(genDemo('drive'));requestAnimationFrame(tick);
+init3D();bind();loadSession(genDemo('dink'));requestAnimationFrame(tick);
 </script></body></html>
